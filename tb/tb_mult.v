@@ -60,7 +60,7 @@ module tb_mult;
                 vectors = vectors + 1;
                 if (p !== expected) begin
                     errors = errors + 1;
-                    $display("MISMATCH at %0t ns: a=%0d b=%0d  expected p=%0d  got p=%0d",
+                    $display("MISMATCH at %0d ns: a=%0d b=%0d  expected p=%0d  got p=%0d",
                              $time, a, b, expected, p);
                 end
             end

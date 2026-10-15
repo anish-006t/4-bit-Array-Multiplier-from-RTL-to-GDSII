@@ -8,3 +8,11 @@ VLSI_4bit_Multiplier_Assignment_Student_Guide.pdf
 sim
 gls
 mult.vcd
+manual
+manual.vcd
+# Report working files (only report/report.pdf is a deliverable)
+report/*
+!report/report.pdf
+
+# Private study notes (not a deliverable)
+explain.md
