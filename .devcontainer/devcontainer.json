@@ -18,7 +18,8 @@
 
 	// GUI tools (GTKWave, KLayout) open as normal windows on the host desktop via X11.
 	// The host's X auth cookie is copied to a fixed folder before each start, as start_x.sh does.
-	"initializeCommand": "mkdir -p ${localEnv:HOME}/.cache/iic-xauth && touch ${localEnv:HOME}/.cache/iic-xauth/xauth && xauth nlist ${localEnv:DISPLAY} | sed -e 's/^..../ffff/' | xauth -f ${localEnv:HOME}/.cache/iic-xauth/xauth nmerge -",
+	// "|| true": a host without xauth or a display still starts the container (only GUIs are affected).
+	"initializeCommand": "mkdir -p ${localEnv:HOME}/.cache/iic-xauth && touch ${localEnv:HOME}/.cache/iic-xauth/xauth && { xauth nlist ${localEnv:DISPLAY} | sed -e 's/^..../ffff/' | xauth -f ${localEnv:HOME}/.cache/iic-xauth/xauth nmerge - ; } || true",
 	"mounts": [
 		"source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
 		"source=${localEnv:HOME}/.cache/iic-xauth,target=/tmp/iic-xauth,type=bind"
