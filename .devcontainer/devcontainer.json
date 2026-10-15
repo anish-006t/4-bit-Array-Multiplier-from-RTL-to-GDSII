@@ -1,0 +1,38 @@
+// VS Code Dev Container for the 4-bit array multiplier assignment.
+// Reopen this folder in the container: Ctrl+Shift+P -> "Dev Containers: Reopen in Container".
+{
+	"name": "IIC-OSIC-TOOLS (SKY130)",
+	"build": { "dockerfile": "Dockerfile" },
+
+	// The project folder appears as /foss/designs, as in the assignment (Section 4.1).
+	"workspaceMount": "source=${localWorkspaceFolder},target=/foss/designs,type=bind",
+	"workspaceFolder": "/foss/designs",
+
+	// Select the SKY130 PDK; the image's setup script derives PDKPATH,
+	// STD_CELL_LIBRARY, KLAYOUT_PATH etc. from PDK.
+	"containerEnv": {
+		"PDK": "sky130A",
+		"DISPLAY": "${localEnv:DISPLAY}",
+		"XAUTHORITY": "/tmp/iic-xauth/xauth"
+	},
+
+	// GUI tools (GTKWave, KLayout) open as normal windows on the host desktop via X11.
+	// The host's X auth cookie is copied to a fixed folder before each start, as start_x.sh does.
+	"initializeCommand": "mkdir -p ${localEnv:HOME}/.cache/iic-xauth && touch ${localEnv:HOME}/.cache/iic-xauth/xauth && xauth nlist ${localEnv:DISPLAY} | sed -e 's/^..../ffff/' | xauth -f ${localEnv:HOME}/.cache/iic-xauth/xauth nmerge -",
+	"mounts": [
+		"source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
+		"source=${localEnv:HOME}/.cache/iic-xauth,target=/tmp/iic-xauth,type=bind"
+	],
+
+	// Fedora runs SELinux in enforcing mode; without this the container cannot
+	// read the project folder or the X11 socket (IIC-OSIC-TOOLS README section 5.1.1).
+	"runArgs": ["--security-opt", "label=disable", "--name", "iic-osic-tools-vscode"],
+
+	"remoteUser": "designer",
+
+	"customizations": {
+		"vscode": {
+			"extensions": ["mshr-h.veriloghdl"]
+		}
+	}
+}
