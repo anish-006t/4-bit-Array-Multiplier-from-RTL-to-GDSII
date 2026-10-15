@@ -84,7 +84,22 @@ Worked example (task 5): A = last digit of `<ROLL_NUMBER_USED>` (`<NAME_USED>`) 
 
 ### Part B — Logic synthesis with Yosys
 
-_To be added._
+Synthesize the RTL to SKY130 standard cells (writes `synth/mult_array_stat.rpt` and `synth/mult_array_netlist.v`):
+
+```bash
+yosys -c synth/synth.tcl
+```
+
+Simulate the gate-level netlist with the same testbench:
+
+```bash
+CELLS=$PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/verilog
+iverilog -g2012 -DFUNCTIONAL -DUNIT_DELAY=#1 -o gls \
+  tb/tb_mult.v $CELLS/primitives.v $CELLS/sky130_fd_sc_hd.v synth/mult_array_netlist.v
+vvp gls
+```
+
+Result: `PASS: 256 vectors checked, 0 errors`
 
 ### Part C — Static timing analysis with OpenSTA
 
