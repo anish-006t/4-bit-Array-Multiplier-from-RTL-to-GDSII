@@ -1,0 +1,5 @@
+# LibreLane run folders are very large; do not commit them (Assignment Part D)
+pnr/runs/
+IIC-OSIC-TOOLS/
+Assignment.pdf
+RTL_to_GDS.pdf
