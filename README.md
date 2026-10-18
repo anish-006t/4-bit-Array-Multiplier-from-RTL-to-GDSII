@@ -103,7 +103,22 @@ Result: `PASS: 256 vectors checked, 0 errors`
 
 ### Part C — Static timing analysis with OpenSTA
 
-_To be added._
+Run 1, with `set T 10.0` in `sta/sta.tcl`:
+
+```bash
+sta sta/sta.tcl
+```
+
+Result: `worst slack max 7.21` (7.213 ns in `sta/mult_array_timing.rpt`), so T_min = 10 − 7.213 = 2.787 ns ≈ 2.79 ns.
+
+Run 2, after changing the period in `sta/sta.tcl` to `set T 2.79`:
+
+```bash
+sed -i 's/^set T 10.0$/set T 2.79/' sta/sta.tcl
+sta sta/sta.tcl
+```
+
+Result: `worst slack max 0.00` (0.003 ns in `sta/mult_array_timing.rpt`). The committed `sta/mult_array_timing.rpt` is from this run.
 
 ### Part D — Physical design with LibreLane
 
