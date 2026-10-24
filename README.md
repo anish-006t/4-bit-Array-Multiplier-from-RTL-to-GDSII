@@ -80,7 +80,7 @@ vvp sim
 
 Result with the error: `FAIL: 256 vectors checked, 95 errors`; after undoing it: `PASS: 256 vectors checked, 0 errors`
 
-Worked example (task 5): A = last digit of `<ROLL_NUMBER_USED>` (`<NAME_USED>`) + 5 = `<A>`, B = `<B>`, A × B = `<P>`.
+Worked example (task 5): roll number of Saumya Vira (2024102044) was used. A = last digit 4 + 5 = 9, B = 7, A × B = 63 (`00111111`). In the waveform, a = 9, b = 7 are applied at 3040 ns and p = 63 appears at the rising edge at 3055 ns.
 
 ### Part B — Logic synthesis with Yosys
 
@@ -122,4 +122,37 @@ Result: `worst slack max 0.00` (0.003 ns in `sta/mult_array_timing.rpt`). The co
 
 ### Part D — Physical design with LibreLane
 
-_To be added._
+Starting `CLOCK_PERIOD` = 1.2 × T_min = 1.2 × 2.787 = 3.344 ns, rounded up to the next 0.5 ns = 3.5 ns. For each run, `CLOCK_PERIOD` in `pnr/config.json` was set to the value in the table, and the flow was run with:
+
+```bash
+cd pnr
+librelane config.json
+```
+
+When a run failed timing, `CLOCK_PERIOD` was increased by 0.5 ns and the flow was run again. All attempts (setup slack = worst over all corners, from `final/metrics.json`):
+
+| Run | Folder (`pnr/runs/`) | CLOCK_PERIOD (ns) | Setup slack (ns) | DRC errors | LVS errors | Result |
+|---|---|---|---|---|---|---|
+| 1 | `RUN_2026-10-25_11-46-09` | 3.5 | −2.546 | 0 | 0 | Setup violations (ss corners) |
+| 2 | `RUN_2026-10-25_11-48-25` | 4.0 | −2.027 | 0 | 0 | Setup violations (ss corners) |
+| 3 | `RUN_2026-10-25_11-49-57` | 4.5 | −1.527 | 0 | 0 | Setup violations (ss corners) |
+| 4 | `RUN_2026-10-25_11-51-29` | 5.0 | −1.027 | 0 | 0 | Setup violations (ss corners) |
+| 5 | `RUN_2026-10-25_11-53-02` | 5.5 | −0.527 | 0 | 0 | Setup violations (ss corners) |
+| 6 | `RUN_2026-10-25_11-54-34` | 6.0 | −0.037 | 0 | 0 | Setup violations (ss corners) |
+| 7 | `RUN_2026-10-25_11-56-04` | 6.5 | −0.205 | 0 | 0 | Setup violations (ss corners) |
+| 8 | `RUN_2026-10-25_11-57-33` | 7.0 | −0.116 | 0 | 0 | Setup violations (ss corners) |
+| 9 | `RUN_2026-10-25_11-59-03` | 7.5 | −0.138 | 0 | 0 | Setup violations (ss corners) |
+| 10 | `RUN_2026-10-25_12-00-34` | 8.0 | +0.362 | 0 | 0 | **Clean, flow completed** |
+
+Copy the results of the final run into `pnr/`:
+
+```bash
+cp runs/RUN_2026-10-25_12-00-34/final/metrics.json metrics.json
+cp runs/RUN_2026-10-25_12-00-34/final/gds/mult_array.gds mult_array.gds
+```
+
+View the layout:
+
+```bash
+klayout mult_array.gds
+```
