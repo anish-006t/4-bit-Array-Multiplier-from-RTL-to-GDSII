@@ -7,7 +7,7 @@ Digital VLSI Design assignment: a 4-bit × 4-bit unsigned array multiplier (8-bi
 | Name | Roll number |
 |---|---|
 | `Anish Toshniwal` | `2024102009` |
-| `Saumya vira` | `2024102044` |
+| `Saumya Vira` | `2024102044` |
 
 ## Repository layout
 
