@@ -16,3 +16,4 @@ report/*
 
 # Private study notes (not a deliverable)
 explain.md
+.devcontainer/
